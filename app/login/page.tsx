@@ -1,9 +1,27 @@
 'use client'
 
-import React from 'react'
-import { Box, Button, Heading, Input, Stack, Text } from '@chakra-ui/react'
+import React, { useCallback, useState } from 'react'
+import {
+  Box,
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  Icon,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Text
+} from '@chakra-ui/react'
+import { Field, Form, Formik } from 'formik'
+import { LoginSchema } from '@/plugins/yup'
+import { GrFormViewHide, GrFormView } from 'react-icons/gr'
 
 export default function Login() {
+  const [show, setShow] = useState(false)
+  const handleClick = useCallback(() => setShow(!show), [setShow, show])
   return (
     <Stack
       bg={'gray.200'}
@@ -32,51 +50,81 @@ export default function Login() {
           our rockstar engineering team and skyrocket your career!
         </Text>
       </Stack>
-      <Box as={'form'} mt={10}>
-        <Stack spacing={4}>
-          <Input
-            placeholder="Firstname"
-            bg={'gray.100'}
-            border={0}
-            color={'gray.500'}
-            _placeholder={{
-              color: 'gray.500'
-            }}
-          />
-          <Input
-            placeholder="firstname@lastname.io"
-            bg={'gray.100'}
-            border={0}
-            color={'gray.500'}
-            _placeholder={{
-              color: 'gray.500'
-            }}
-          />
-          <Input
-            placeholder="+1 (___) __-___-___"
-            bg={'gray.100'}
-            border={0}
-            color={'gray.500'}
-            _placeholder={{
-              color: 'gray.500'
-            }}
-          />
-        </Stack>
-        <Button
-          fontFamily={'heading'}
-          mt={8}
-          w={'full'}
-          bgGradient="linear(to-r, red.400,pink.400)"
-          color={'white'}
-          _hover={{
-            bgGradient: 'linear(to-r, red.400,pink.400)',
-            boxShadow: 'xl'
+      <Box mt={10}>
+        <Formik
+          initialValues={{ email: '', password: '' }}
+          onSubmit={(values, actions) => {
+            setTimeout(() => {
+              alert(JSON.stringify(values, null, 2))
+              actions.setSubmitting(false)
+            }, 1000)
           }}
+          validationSchema={LoginSchema}
         >
-          Submit
-        </Button>
+          {() => (
+            <Form>
+              <Field name="email">
+                {({ field, form }) => (
+                  <FormControl
+                    isInvalid={form.errors.email && form.touched.email}
+                  >
+                    <FormLabel>Email</FormLabel>
+                    <Input
+                      {...field}
+                      placeholder="your_email@gmail.com"
+                      bg={'gray.100'}
+                    />
+                    <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="password">
+                {({ field, form }) => (
+                  <FormControl
+                    isInvalid={form.errors.password && form.touched.password}
+                    mt={5}
+                  >
+                    <FormLabel>Password</FormLabel>
+                    <InputGroup size="md">
+                      <Input
+                        {...field}
+                        placeholder="passoword"
+                        bg={'gray.100'}
+                        pr="4.5rem"
+                        type={show ? 'text' : 'password'}
+                      />
+                      <InputRightElement width="4.5rem">
+                        <Icon
+                          as={show ? GrFormView : GrFormViewHide}
+                          w={6}
+                          h={6}
+                          cursor="pointer"
+                          onClick={handleClick}
+                        />
+                      </InputRightElement>
+                    </InputGroup>
+                    <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Button
+                fontFamily={'heading'}
+                mt={8}
+                w={'full'}
+                bgGradient="linear(to-r, red.400,pink.400)"
+                color={'white'}
+                _hover={{
+                  bgGradient: 'linear(to-r, red.400,pink.400)',
+                  boxShadow: 'xl'
+                }}
+                type="submit"
+              >
+                Submit
+              </Button>
+            </Form>
+          )}
+        </Formik>
       </Box>
-      form
     </Stack>
   )
 }
