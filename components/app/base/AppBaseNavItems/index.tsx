@@ -1,21 +1,43 @@
 'use client'
 
-import React, { memo, ReactNode } from 'react'
+import React, { memo, ReactNode, useCallback } from 'react'
 import { Flex, FlexProps, Icon, Link } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
+import { useAuthStore } from '@/plugins/zustand'
+import { useRouter } from 'next/navigation'
 
 interface NavItemProps extends FlexProps {
+  name: string
   icon: IconType
   path: string
   children: ReactNode
 }
 
-function AppBaseNavItems({ icon, children, path, ...rest }: NavItemProps) {
+function AppBaseNavItems({
+  icon,
+  children,
+  path,
+  name,
+  ...rest
+}: NavItemProps) {
+  const router = useRouter()
+  const logout = useAuthStore(state => state.logout)
+
+  const onClickLink = useCallback(
+    (name: string, path: string) => {
+      if (name === 'Logout') {
+        logout()
+      }
+      router.push(path)
+    },
+    [logout, router]
+  )
+
   return (
     <Link
-      href={path}
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
+      onClick={() => onClickLink(name, path)}
     >
       <Flex
         align="center"

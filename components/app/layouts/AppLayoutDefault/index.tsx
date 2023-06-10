@@ -11,14 +11,14 @@ import {
   Flex,
   Text
 } from '@chakra-ui/react'
-import { FiHome, FiLogIn, FiMenu } from 'react-icons/fi'
+import { FiHome, FiLogOut, FiMenu } from 'react-icons/fi'
 import { AppBaseSidebar } from '@/components'
 
 function AppLayoutDefault({ children }: { children: React.ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const navItems = [
     { name: 'Home', path: '/', icon: FiHome },
-    { name: 'Login', path: '/login', icon: FiLogIn }
+    { name: 'Logout', path: '', icon: FiLogOut }
   ]
   return (
     <section>

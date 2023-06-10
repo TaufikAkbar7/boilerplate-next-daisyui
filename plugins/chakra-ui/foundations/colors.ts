@@ -1,4 +1,5 @@
 import tailwindColors from './tailwindColors'
+import customColors from './customColors'
 
 const colors = {
   brand: tailwindColors.blue,
@@ -14,7 +15,10 @@ const colors = {
   orange: tailwindColors.amber,
 
   info: tailwindColors.sky,
-  blue: tailwindColors.sky
+  blue: tailwindColors.sky,
+
+  // custom colors
+  ...customColors
 }
 
 export default colors

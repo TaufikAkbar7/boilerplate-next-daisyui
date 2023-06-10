@@ -18,10 +18,20 @@ import {
 import { Field, Form, Formik } from 'formik'
 import { LoginSchema } from '@/plugins/yup'
 import { GrFormViewHide, GrFormView } from 'react-icons/gr'
+import { useAuthStore } from '@/plugins/zustand'
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
   const [show, setShow] = useState(false)
   const handleClick = useCallback(() => setShow(!show), [setShow, show])
+  const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated)
+  const router = useRouter()
+
+  const onSubmit = useCallback(() => {
+    setIsAuthenticated(true)
+    router.push('/')
+  }, [setIsAuthenticated, router])
+
   return (
     <Stack
       bg={'gray.200'}
@@ -53,12 +63,7 @@ export default function Login() {
       <Box mt={10}>
         <Formik
           initialValues={{ email: '', password: '' }}
-          onSubmit={(values, actions) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2))
-              actions.setSubmitting(false)
-            }, 1000)
-          }}
+          onSubmit={onSubmit}
           validationSchema={LoginSchema}
         >
           {() => (
@@ -71,7 +76,7 @@ export default function Login() {
                     <FormLabel>Email</FormLabel>
                     <Input
                       {...field}
-                      placeholder="your_email@gmail.com"
+                      placeholder="your_email"
                       bg={'gray.100'}
                     />
                     <FormErrorMessage>{form.errors.email}</FormErrorMessage>

@@ -35,7 +35,12 @@ function AppBaseSidebar({ onClose, navItems, ...rest }: SidebarProps) {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {navItems.map(nav => (
-        <AppNavItems key={nav.name} path={nav.path} icon={nav.icon}>
+        <AppNavItems
+          key={nav.name}
+          path={nav.path}
+          icon={nav.icon}
+          name={nav.name}
+        >
           {nav.name}
         </AppNavItems>
       ))}
