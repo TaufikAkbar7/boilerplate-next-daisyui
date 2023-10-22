@@ -1,5 +1,5 @@
 import { StateCreator } from 'zustand'
-import { IAppSlice } from '../interfaces/app.interfaces'
+import { IAppSlice } from '../interfaces/app.interface'
 
 const createAppSlice: StateCreator<IAppSlice> = set => ({
   errorMessage: '',

@@ -1,20 +1,32 @@
-import React, { ReactElement, useCallback } from 'react'
-import { NextPageWithLayout } from './_app'
-import { AppLayoutAuth } from '@/components'
-import { Button, Form, Input } from 'antd'
-import { useRouter } from 'next/router'
+'use client'
+
+// react
+import React, { useCallback } from 'react'
+
+// store
 import { useAuthStore } from '@/plugins/zustand'
 
-const Login: NextPageWithLayout = () => {
+// antd
+import { Form, Input } from 'antd'
+
+// components
+import { AppBaseButton } from '@/components'
+
+// next router
+import { useRouter } from 'next/navigation'
+
+const Login = () => {
   const router = useRouter()
-  const [form] = Form.useForm()
   const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated)
 
-  const onClickSubmit = useCallback(async () => {
-    await form.validateFields()
-    setIsAuthenticated(true)
-    router.push('/')
-  }, [form, router, setIsAuthenticated])
+  const onSave = useCallback(
+    async (values: any) => {
+      console.log(values)
+      setIsAuthenticated(true)
+      router.push('/')
+    },
+    [router, setIsAuthenticated]
+  )
 
   return (
     <div className="flex flex-col">
@@ -27,10 +39,10 @@ const Login: NextPageWithLayout = () => {
       </div>
       <Form
         layout="vertical"
-        form={form}
         name="form_login"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 26 }}
+        onFinish={onSave}
         autoComplete="off"
         requiredMark={false}
         className="!mt-5"
@@ -52,27 +64,14 @@ const Login: NextPageWithLayout = () => {
           className="font-semibold"
           rules={[{ required: true, message: 'Silahkan masukan password!' }]}
         >
-          <Input.Password
-            size="large"
-            placeholder="Password"
-            onPressEnter={onClickSubmit}
-          />
+          <Input.Password size="large" placeholder="Password" />
         </Form.Item>
-        <Button
-          block
-          type="primary"
-          className="!pt-2 !pb-8 !font-semibold mt-2"
-          onClick={onClickSubmit}
-        >
-          Login
-        </Button>
+        <AppBaseButton block className="bg-black !text-white" htmlType="submit">
+          LOGIN
+        </AppBaseButton>
       </Form>
     </div>
   )
-}
-
-Login.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayoutAuth>{page}</AppLayoutAuth>
 }
 
 export default Login

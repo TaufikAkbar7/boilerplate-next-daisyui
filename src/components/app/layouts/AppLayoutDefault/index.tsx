@@ -1,7 +1,19 @@
+'use client'
+
+// react
 import React, { memo, useCallback, useState } from 'react'
+
+// antd
 import { Layout, Menu, Button } from 'antd'
-import { useRouter } from 'next/router'
+import { MenuInfo } from 'rc-menu/lib/interface'
+
+// react router
+import { useRouter, usePathname } from 'next/navigation'
+
+// assets
 import LogoutIcon from '@/assets/svg/ic-logout.svg'
+
+// store
 import { useAuthStore } from '@/plugins/zustand'
 
 type TProps = {
@@ -10,7 +22,8 @@ type TProps = {
 
 function AppLayoutDefault({ children }: TProps) {
   const router = useRouter()
-  const [current, setCurrent] = useState(router.pathname)
+  const pathname = usePathname()
+  const [current, setCurrent] = useState(pathname)
   const logout = useAuthStore(state => state.logout)
 
   const { Sider, Content } = Layout
@@ -27,7 +40,7 @@ function AppLayoutDefault({ children }: TProps) {
    * @returns void
    */
   const onClickMenu = useCallback(
-    e => {
+    (e: MenuInfo) => {
       setCurrent(e.key)
       router.push(e.key)
     },
